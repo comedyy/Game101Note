@@ -211,7 +211,7 @@ public class BVH : MonoBehaviour
 
     private void CheckRay(BVHTreeNode node, Ray ray)
     {
-        if(!node.bouding.IntersectRay(ray))
+        if(!AABBTest.CalIntersection(node.bouding, ray, out var x, out var x1))
         {
             return;
         }
@@ -225,7 +225,7 @@ public class BVH : MonoBehaviour
         {
             foreach(var obj in node.objs)
             {
-                if(obj.GetBounding().IntersectRay(ray))
+                if(AABBTest.CalIntersection(obj.GetBounding(), ray, out var x2, out var x3))
                 {
                     obj.rayIntersectTime = Time.time;
                 }

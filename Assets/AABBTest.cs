@@ -24,7 +24,7 @@ public class AABBTest : MonoBehaviour
         
     }
 
-    (Vector3, Vector3) CalIntersection()
+    public static bool CalIntersection(Bounds box, Ray ray, out Vector3 enterPos, out Vector3 exitPos)
     {
         var tMin = 0;
         var point = ray.origin + tMin * ray.direction;
@@ -50,10 +50,14 @@ public class AABBTest : MonoBehaviour
 
         if(tExit > 0 && tExit > tEnter)
         {
-            return (ray.origin + tEnter * ray.direction, ray.origin + tExit * ray.direction);
+            enterPos = ray.origin + tEnter * ray.direction;
+            exitPos = ray.origin + tExit * ray.direction;
+            return true;
         }
 
-        return (default, default);
+        enterPos = default;
+        exitPos = default;
+        return false;
     }
 
     void OnDrawGizmos()
@@ -67,7 +71,8 @@ public class AABBTest : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(box.center, box.size);
 
-        (var enter, var exit) = CalIntersection();
+        var intersection = CalIntersection(box, ray, out var enter, out var exit);
+
         Debug.Log(enter + " " + exit);
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(enter, Vector3.one * 0.3f);
